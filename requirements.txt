@@ -1,32 +1,27 @@
-# Core Dependencies
-ffmpeg-python>=0.2.0    # FFmpeg Python bindings
-numpy>=1.21.0           # Required for audio/video processing
-pyyaml>=6.0.0          # Configuration management
-Pillow>=10.0.0          # Image processing for BLIP
+# Core Application Dependencies
+ffmpeg-python~=0.2.0    # FFmpeg integration
+numpy~=1.21             # Numerical computing
+pyyaml~=6.0             # YAML configuration
+Pillow~=10.0            # Image processing
 
-# Machine Learning & AI
-torch>=2.0.0            # PyTorch for ML models
-transformers>=4.30.0    # Hugging Face Transformers
-accelerate>=0.20.0      # Optimized model loading
-openai-whisper>=1.0.0   # OpenAI Whisper for transcription
-scenedetect>=0.6.0      # Scene detection
+# Machine Learning Stack
+torch~=2.0              # PyTorch base
+transformers~=4.30      # Transformer models
+accelerate~=0.20        # Distributed training
+openai-whisper~=1.0     # Audio transcription
+scenedetect~=0.6        # Scene detection
 
-# Vision & Scene Analysis
-opencv-python>=4.8.0    # Video frame processing
-moviepy>=1.0.3          # Video file handling
+# Media Processing
+opencv-python~=4.8      # Computer vision
+moviepy~=1.0            # Video editing
+soundfile~=0.12         # Audio I/O
+librosa~=0.10           # Audio analysis
+pydub~=0.25             # Audio manipulation
+gTTS~=2.3               # Text-to-speech
 
-# Audio Processing
-soundfile>=0.12.0       # Audio file handling
-librosa>=0.10.0         # Audio analysis
-pydub>=0.25.1           # Audio manipulation
-gTTS>=2.3.0            # Google Text-to-Speech
-
-# Utility
-tqdm>=4.65.0            # Progress bars
-python-dotenv>=1.0.0    # Environment variable management
-loguru>=0.7.0           # Enhanced logging
-requests>=2.31.0        # HTTP requests for APIs
-
-# Testing & Development
-pytest>=7.0.0           # Testing framework
-pytest-cov>=4.1.0       # Test coverage reporting
+# System Utilities
+python-dotenv~=1.0      # Environment management
+loguru~=0.7             # Structured logging
+requests~=2.31          # HTTP client
+psutil~=5.9             # System monitoring
+tqdm~=4.65              # Progress indicators
