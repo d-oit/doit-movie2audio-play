@@ -171,7 +171,7 @@ class SceneDetector(BaseComponent):
             model_name = self.config.get('model', 'Salesforce/blip2-opt-2.7b')
             self.logger.info(f"Loading BLIP2 model: {model_name} on {device}")
             
-            self.processor = Blip2Processor.from_pretrained(model_name)
+            self.processor = Blip2Processor.from_pretrained(model_name, use_fast=True)
             self.model = Blip2ForConditionalGeneration.from_pretrained(
                 model_name,
                 torch_dtype=torch.float16 if device == "cuda" else torch.float32
@@ -217,6 +217,9 @@ class SceneDetector(BaseComponent):
                                   threshold=threshold,
                                   min_scene_len=int(min_scene_duration * 30)
                               ))
+            
+            if not scene_list:
+                raise ValueError("No scenes detected - check video content or adjust detection threshold")
             
             # Process each scene
             scenes = []
