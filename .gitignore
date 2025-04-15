@@ -38,6 +38,7 @@ test_data/*.mp4
 test_data/*.wav
 test_data/*.mp3
 video/
+input/
 
 # Generated Audio Files
 temp/narrations/

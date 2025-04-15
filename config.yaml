@@ -1,0 +1,111 @@
+# Video-to-Audio Description Generator Configuration
+
+# Input/Output Settings
+paths:
+  input_dir: "input"
+  output_dir: "output"
+  temp_dir: "temp"
+
+# Processing Settings
+processing:
+  # Supported video formats
+  supported_formats:
+    - ".mp4"
+    - ".mkv"
+    - ".avi"
+    - ".mov"
+  
+  # Audio extraction settings
+  audio:
+    format: "wav"
+    sample_rate: 44100
+    channels: 2
+
+# Logo Detection
+logo_patterns:
+  # Standard studio patterns
+  studios:
+    - "SONY PICTURES ENTERTAINMENT"
+    - "COLUMBIA PICTURES"
+    - "PARAMOUNT"
+    - "WARNER BROS"
+    - "UNIVERSAL"
+    - "20TH CENTURY"
+    - "DISNEY"
+    
+  # TV channel watermarks
+  channels:
+    - "2DF HD"
+    - "BBC"
+    - "ITV"
+    - "CNN"
+    
+  # Generic patterns (regex)
+  generic:
+    - "a .* company"
+    - "presents"
+    - "production"
+    - "watermark"
+    - "logo"
+
+# Component Settings
+components:
+  # Memory management settings
+  memory:
+    gpu_memory_threshold: 0.8  # Maximum GPU memory usage (80%)
+    required_memory:
+      blip: 6000  # Required memory in MB for BLIP model
+      mistral: 4000  # Required memory in MB for Mistral model
+    enable_cpu_fallback: true  # Fall back to CPU if GPU memory is insufficient
+    clear_memory_between_stages: true  # Clear GPU memory between processing stages
+
+  # FFmpeg settings
+  ffmpeg:
+    threads: 4
+    loglevel: "info"
+    
+  # Whisper transcription settings
+  whisper:
+    model: "base"
+    language: "en"
+    task: "transcribe"
+    
+  # BLIP scene detection
+  blip:
+    model: "Salesforce/blip2-opt-2.7b"
+    frame_interval: 1.0  # seconds between frame analysis
+    min_scene_duration: 2.0  # minimum scene duration in seconds
+    batch_size: 1  # Process one frame at a time to manage memory
+    timeout: 30  # Maximum seconds for model inference
+    
+  # Mistral description generation
+  mistral:
+    model: "mistral-small-latest"
+    max_length: 100
+    temperature: 0.7
+    batch_size: 4  # Process descriptions in small batches
+    timeout: 30  # Maximum seconds for model inference
+    
+  # Text-to-Speech settings
+  tts:
+    voice: "de-DE-Standard-A"  # Example German voice
+    rate: 1.0
+    pitch: 0.0
+
+# Logging Settings
+logging:
+  # Terminal progress format
+  progress_format: "[%(levelname)s] %(message)s"
+  
+  # Component log format
+  component_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Component log levels
+  levels:
+    terminal: "INFO"
+    ffmpeg: "DEBUG"
+    whisper: "DEBUG"
+    blip: "DEBUG"
+    mistral: "DEBUG"
+    tts: "DEBUG"
+    main: "INFO"

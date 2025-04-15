@@ -70,8 +70,8 @@ check_hf_token() {
         echo -e "${GREEN}✓ Hugging Face token found in .env${NC}"
         return 0
     else
-        echo -e "${RED}✗ No Hugging Face token found in .env${NC}"
-        return 1
+        echo -e "${YELLOW}⚠ No Hugging Face token found in .env (may be required for some models)${NC}"
+        return 0 # Make it a warning, not an error
     fi
 }
 
@@ -109,7 +109,7 @@ main() {
         echo "  pip install -r requirements.txt"
     else
         echo -e "${RED}Found $errors issue(s) that need to be addressed.${NC}"
-        echo "Please check PYTHON_VERSION.md for setup instructions."
+        echo "Please review the setup instructions in README.md."
         exit 1
     fi
 }

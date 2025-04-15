@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # Configuration
-PYTHON_VERSION="3.8"  # Minimum required version
+# PYTHON_VERSION="3.8" # Version check removed, rely on pip install
 VENV_DIR=".venv"
 LOG_FILE="setup.log"
 
@@ -21,17 +21,13 @@ log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
 }
 
-# Check Python version
-check_python_version() {
-    if ! command -v python3 &> /dev/null; then
-        handle_error "Python 3 is not installed"
+# Check Python command exists
+check_python_command() {
+    if ! command -v python3 &> /dev/null && ! command -v python &> /dev/null; then
+        handle_error "Python 3 is not installed or not in PATH"
     fi
-    
-    local version
-    version=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
-    if ! printf '%s\n%s\n' "$PYTHON_VERSION" "$version" | sort -C -V; then
-        handle_error "Python $PYTHON_VERSION or higher is required (found $version)"
-    fi
+    # Use python3 if available, otherwise python
+    PYTHON_CMD=$(command -v python3 || command -v python)
 }
 
 # Check for required system packages
@@ -64,12 +60,20 @@ setup_virtualenv() {
     
     # Create venv if it doesn't exist
     if [ ! -d "$VENV_DIR" ]; then
-        python3 -m venv "$VENV_DIR" || handle_error "Failed to create virtual environment"
+        $PYTHON_CMD -m venv "$VENV_DIR" || handle_error "Failed to create virtual environment"
     fi
     
     # Activate venv
-    # shellcheck source=/dev/null
-    source "$VENV_DIR/bin/activate" || handle_error "Failed to activate virtual environment"
+    # Activate venv (handle Unix and Windows)
+    if [ -f "$VENV_DIR/bin/activate" ]; then
+        # shellcheck source=/dev/null
+        source "$VENV_DIR/bin/activate" || handle_error "Failed to activate Unix virtual environment"
+    elif [ -f "$VENV_DIR/Scripts/activate" ]; then
+        # shellcheck source=/dev/null
+        source "$VENV_DIR/Scripts/activate" || handle_error "Failed to activate Windows virtual environment"
+    else
+         handle_error "Could not find activation script in $VENV_DIR"
+    fi
     
     # Upgrade pip
     python -m pip install --upgrade pip >> "$LOG_FILE" 2>&1 || handle_error "Failed to upgrade pip"
@@ -80,7 +84,7 @@ install_dependencies() {
     log "Installing Python dependencies..."
     
     # Install torch first (GPU if available)
-    if python -c "import torch; assert torch.cuda.is_available()" &> /dev/null; then
+    if $PYTHON_CMD -c "import torch; assert torch.cuda.is_available()" &> /dev/null; then
         log "GPU detected, installing PyTorch with CUDA support"
         pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 >> "$LOG_FILE" 2>&1 || \
             handle_error "Failed to install PyTorch"
@@ -124,7 +128,7 @@ main() {
     > "$LOG_FILE"
     
     # Run setup steps
-    check_python_version
+    check_python_command # Check python exists
     check_system_dependencies
     setup_virtualenv
     install_dependencies
@@ -135,11 +139,14 @@ main() {
 Setup completed successfully!
 
 Next steps:
-1. Edit .env file with your settings
+1. Edit `.env` file if needed (e.g., for API keys if using API-based models).
 2. Activate the virtual environment:
-   source $VENV_DIR/bin/activate
-3. Run the test pipeline:
-   ./scripts/test_pipeline.sh test_data/test_clip.mp4
+   - Unix/macOS: `source .venv/bin/activate`
+   - Windows: `.venv\Scripts\activate`
+3. Run the tests:
+   `pytest tests/ -v`
+4. Run the main script (example):
+   `python -m src.main input/your_video.mp4`
 
 For more information, see the README.md file.
 "

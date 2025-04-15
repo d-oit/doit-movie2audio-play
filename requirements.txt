@@ -1,41 +1,32 @@
-# Python version requirement: >= 3.9, < 3.12 (Modified for Python 3.13 compatibility)
+# Core Dependencies
+ffmpeg-python>=0.2.0    # FFmpeg Python bindings
+numpy>=1.21.0           # Required for audio/video processing
+pyyaml>=6.0.0          # Configuration management
+Pillow>=10.0.0          # Image processing for BLIP
 
-# Core dependencies
-python-dotenv>=0.19.0,<1.0.0
+# Machine Learning & AI
+torch>=2.0.0            # PyTorch for ML models
+transformers>=4.30.0    # Hugging Face Transformers
+accelerate>=0.20.0      # Optimized model loading
+openai-whisper>=1.0.0   # OpenAI Whisper for transcription
+scenedetect>=0.6.0      # Scene detection
 
-# Deep Learning - Using compatible versions
-torch>=2.0.0
-torchaudio>=2.0.0
-transformers>=4.21.0,<5.0.0
-accelerate>=0.12.0,<1.0.0
-
-# Image Processing
-Pillow>=9.0.0
-opencv-python>=4.5.0,<5.0.0
+# Vision & Scene Analysis
+opencv-python>=4.8.0    # Video frame processing
+moviepy>=1.0.3          # Video file handling
 
 # Audio Processing
-soundfile>=0.10.3,<1.0.0
-# pydub>=0.25.1,<1.0.0 # Removed - Replaced with moviepy for audio manipulation
-ffmpeg-python>=0.2.0,<1.0.0
-silero-vad>=5.1.0,<6.0.0
+soundfile>=0.12.0       # Audio file handling
+librosa>=0.10.0         # Audio analysis
+pydub>=0.25.1           # Audio manipulation
+gTTS>=2.3.0            # Google Text-to-Speech
 
-# Video Processing
-moviepy>=1.0.3,<2.0.0
+# Utility
+tqdm>=4.65.0            # Progress bars
+python-dotenv>=1.0.0    # Environment variable management
+loguru>=0.7.0           # Enhanced logging
+requests>=2.31.0        # HTTP requests for APIs
 
-# Voice Activity Detection - Commented out due to compatibility issues
-# pyannote.audio>=2.1.0,<3.0.0
-
-# Text-to-Speech - Using alternative TTS engines compatible with Python 3.13
-# Option 3: Alternative TTS engines
-gTTS>=2.3.0,<3.0.0  # Google Text-to-Speech
-pyttsx3>=2.90,<3.0.0  # Offline TTS
-
-# Progress bars and logging
-tqdm>=4.62.0,<5.0.0
-
-# Additional requirements
-setuptools>=65.5.1
-wheel>=0.38.0
-
-# Development Tools / Static Analysis
-mypy>=1.0.0,<2.0.0
+# Testing & Development
+pytest>=7.0.0           # Testing framework
+pytest-cov>=4.1.0       # Test coverage reporting
